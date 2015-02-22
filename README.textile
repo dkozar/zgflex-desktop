@@ -38,6 +38,6 @@ h2. Resources
 * "Full Screen Demo":http://dankokozar.com/flex/desktop/
 * "Screenshots":http://dankokozar.com/blog/projects/zgflexlib-desktop-component/
 * "ZgFlex library at GoogleCode":https://code.google.com/p/zgflex/
-* ZgFlex User Group is now "Frontman HR":www.frontman-hr.org/
+* ZgFlex User Group is now "Frontman HR":http://www.frontman-hr.org/
 * "Author's homepage":http://dankokozar.com
 * "I’m @DankoKozar on Twitter":https://twitter.com/DankoKozar.
