@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:desktop="org.zgflex.desktop.*"
+	xmlns:layout="org.zgflex.desktop.layout.*"
+	layout="vertical" 
+	width="100%" height="100%" 
+	frameRate="30" 
+	horizontalScrollPolicy="off"
+	verticalScrollPolicy="off" xmlns:state="org.zgflex.desktop.layout.state.*"
+	creationComplete="onCreationComplete()" 
+	viewSourceURL="srcview/index.html">
+	
+	<mx:Style source="assets/styles.css"/>
+	
+	<mx:Script>
+		<![CDATA[
+			import gs.easing.Expo;
+			import org.zgflex.util.Util;
+			import mx.core.SoundAsset;
+		
+			/**
+			 * Copyright ZgFlex.org 2008 
+			 * @author Danko Kozar
+			 * 
+			 */
+		
+			import org.zgflex.desktop.DesktopEvent;
+			import mx.events.ItemClickEvent;
+			import mx.controls.Alert;
+			
+			// embedding sound
+			[Embed('assets/audio/explosion.mp3')]
+            private var explosion_mp3:Class;
+            private var explosionSound:SoundAsset;
+            private var st:SoundTransform;
+
+			private var timer:Timer;
+			private function onCreationComplete():void {
+				// init sound
+				explosionSound = new explosion_mp3() as SoundAsset;
+				st = new SoundTransform();
+				
+				// start timer
+				timer = new Timer(1500);
+				timer.addEventListener(TimerEvent.TIMER, onTimer);
+				timer.start();
+			}
+			
+			private var stateArr:Array = ["FIRST", "SECOND", "THIRD"];
+			private function onTimer(e:TimerEvent):void {
+				changeFormation();
+				timer.delay = 500+Math.random()*3000;
+			}
+			
+			private function changeFormation():void {
+				var rnd:uint = Math.floor(Math.random()*3);
+				stateMgr.state = stateArr[rnd];
+				desktop.doLayout();
+			}
+
+			private function onIconClick(e:DesktopEvent):void {
+				if (chkAudio.selected){
+					st.volume = sldrVolume.value; // volume
+					explosionSound.play(0, 0, st);
+				}
+				desktop.removeIcon(e.icon);
+				if (desktop.iconsIterator.count == 0){ // all enemies dead
+					restart();
+				}
+			}
+			
+			private function restart():void {
+				desktop.icons = enemies; // restart game
+				changeFormation();
+			}
+
+		]]>
+	</mx:Script>
+
+	<mx:Array id="enemies">
+		<mx:SWFLoader id="o01" source="@Embed(source='assets/fla/Invader.swf')" x="100" y="100" />
+		<mx:SWFLoader id="o02" source="@Embed(source='assets/fla/Invader.swf')" x="200" y="100" />
+		<mx:SWFLoader id="o03" source="@Embed(source='assets/fla/Invader.swf')" x="300" y="100" />
+		<mx:SWFLoader id="o04" source="@Embed(source='assets/fla/Invader.swf')" x="200" y="200" />
+		<mx:SWFLoader id="o05" source="@Embed(source='assets/fla/Invader.swf')" x="300" y="200" />
+		<mx:SWFLoader id="o06" source="@Embed(source='assets/fla/Invader.swf')" x="400" y="200" />
+		<mx:SWFLoader id="o07" source="@Embed(source='assets/fla/Invader.swf')" x="300" y="300" />
+		<mx:SWFLoader id="o08" source="@Embed(source='assets/fla/Invader.swf')" x="400" y="300" />
+		<mx:SWFLoader id="o09" source="@Embed(source='assets/fla/Invader.swf')" x="500" y="300" />
+		<mx:SWFLoader id="o10" source="@Embed(source='assets/fla/Invader.swf')" x="400" y="500" />
+	</mx:Array>
+
+	<!-- Application control bar -->
+	<mx:ApplicationControlBar width="100%" dock="true" >	
+		<mx:CheckBox id="chkAudio" label="Play audio" selected="true" />
+		<mx:Spacer width="20" />
+		<mx:Label text="Volume:" />
+		<mx:HSlider id="sldrVolume" minimum="0" maximum="1" tickInterval="0.1" value="0.5" />
+	</mx:ApplicationControlBar>
+	
+	<!-- Desktop & background -->
+	<mx:Canvas width="100%" height="100%" backgroundColor="0x000000">
+		<!-- Desktop component -->
+		<desktop:Desktop id="desktop" width="100%" height="100%" 
+			layoutManager="{stateMgr}"
+			iconClick="onIconClick(event)"
+			enableSelect="false"
+			enableDrag="false"
+			icons="{enemies}"
+			iconAddedEffect="{addEffect}"
+			iconRemovedEffect="{removeEffect}" >
+		</desktop:Desktop>		
+	</mx:Canvas>
+	
+	<mx:Blur id="addEffect" blurYFrom="50" blurYTo="0" />
+	<mx:Blur id="removeEffect" blurYFrom="0" blurYTo="50" />
+	
+	<!-- State layout manager -->
+	<state:StateLayoutManager id="stateMgr" compareById="true" easingFunction="{gs.easing.Expo.easeInOut}">
+		<state:states>
+			<state:State label="FIRST">
+				<state:positions>
+					<state:Position target="{o01}" x="100" y="100" />
+					<state:Position target="{o02}" x="200" y="100" />
+					<state:Position target="{o03}" x="300" y="100" />
+					<state:Position target="{o04}" x="400" y="100" />
+					<state:Position target="{o05}" x="600" y="100" />
+					<state:Position target="{o06}" x="700" y="100" />
+					<state:Position target="{o07}" x="600" y="200" />
+					<state:Position target="{o08}" x="700" y="200" />
+					<state:Position target="{o09}" x="600" y="300" />
+					<state:Position target="{o10}" x="700" y="300" />
+				</state:positions>
+			</state:State>
+			<state:State label="SECOND">
+				<state:positions>
+					<state:Position target="{o01}" x="100" y="200" />
+					<state:Position target="{o02}" x="200" y="300" />
+					<state:Position target="{o03}" x="300" y="400" />
+					<state:Position target="{o04}" x="600" y="400" />
+					<state:Position target="{o05}" x="700" y="300" />
+					<state:Position target="{o06}" x="800" y="200" />
+					<state:Position target="{o07}" x="400" y="500" />
+					<state:Position target="{o08}" x="500" y="500" />
+					<state:Position target="{o09}" x="400" y="600" />
+					<state:Position target="{o10}" x="500" y="600" />
+				</state:positions>
+			</state:State>
+			<state:State label="THIRD">
+				<state:positions>
+					<state:Position target="{o01}" x="700" y="100" />
+					<state:Position target="{o02}" x="700" y="200" />
+					<state:Position target="{o03}" x="700" y="300" />
+					<state:Position target="{o04}" x="700" y="400" />
+					<state:Position target="{o05}" x="700" y="500" />
+					<state:Position target="{o06}" x="800" y="100" />
+					<state:Position target="{o07}" x="800" y="200" />
+					<state:Position target="{o08}" x="800" y="300" />
+					<state:Position target="{o09}" x="800" y="400" />
+					<state:Position target="{o10}" x="800" y="500" />
+				</state:positions>
+			</state:State>
+		</state:states>
+	</state:StateLayoutManager>
+</mx:Application>

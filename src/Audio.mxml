@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:desktop="org.zgflex.desktop.*"
+	xmlns:layout="org.zgflex.desktop.layout.*"
+	layout="vertical" 
+	width="800" height="600" 
+	frameRate="30" 
+	horizontalScrollPolicy="off"
+	verticalScrollPolicy="off"
+	viewSourceURL="srcview/index.html">
+	
+	<mx:Style source="assets/styles.css"/>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.core.SoundAsset;
+		
+			/**
+			 * Copyright ZgFlex.org 2008 
+			 * @author Danko Kozar
+			 * 
+			 */
+		
+			import org.zgflex.desktop.DesktopEvent;
+			import mx.events.ItemClickEvent;
+			import mx.controls.Alert;
+			
+			// embedding sound
+			[Embed('assets/audio/snap.mp3')]
+            private var snap_mp3:Class;
+            private var snapSound:SoundAsset = new snap_mp3() as SoundAsset;
+
+		]]>
+	</mx:Script>
+
+	<!-- Application control bar -->
+	<mx:ApplicationControlBar width="100%" dock="true" >	
+		<mx:CheckBox id="chkSnap" label="Snap to grid" selected="true" click="desktop.doLayout()" />
+	</mx:ApplicationControlBar>
+	
+	<!-- Desktop & background -->
+	<mx:Canvas width="100%" height="100%" backgroundColor="0x0066AA">
+		<!-- Desktop component -->
+		<desktop:Desktop id="desktop" width="100%" height="100%" 
+			layoutManager="{snapMgr}"
+			layoutAfterMove="{chkSnap.selected}"
+			iconDoubleClick="Alert.show('You double-clicked the icon.')"
+			layoutUpdate="snapSound.play()" >
+			<desktop:icons>
+				<mx:Image id="o01" source="@Embed(source='assets/icons/acrobat.png')" x="300" y="100" />
+				<mx:Image id="o02" source="@Embed(source='assets/icons/bridge.png')" x="400" y="100" />
+				<mx:Image id="o03" source="@Embed(source='assets/icons/dreamweaver.png')" x="500" y="100" />
+				<mx:Image id="o04" source="@Embed(source='assets/icons/fireworks.png')" x="200" y="200" />
+				<mx:Image id="o05" source="@Embed(source='assets/icons/flash.png')" x="400" y="200" />
+				<mx:Image id="o06" source="@Embed(source='assets/icons/illustrator.png')" x="600" y="200" />
+				<mx:Image id="o07" source="@Embed(source='assets/icons/photoshop.png')" x="200" y="300" />
+				<mx:Image id="o08" source="@Embed(source='assets/icons/windows_restart.png')" x="400" y="300" />
+				<mx:Image id="o09" source="@Embed(source='assets/icons/windows_stand_by.png')" x="600" y="300" />
+				<mx:Image id="o10" source="@Embed(source='assets/icons/windows_off.png')" x="400" y="400" />
+			</desktop:icons>
+		</desktop:Desktop>		
+	</mx:Canvas>
+	
+	<!-- SnapToGridLayoutManager -->
+	<layout:SnapToGridLayoutManager id="snapMgr" horizontalDistance="100" verticalDistance="100" tweenDuration="0" />
+	
+</mx:Application>

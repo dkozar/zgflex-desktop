@@ -1,0 +1,68 @@
+/* CSS file */
+
+Application
+{
+	padding-left:0;
+	padding-right:0;
+	padding-top:0;
+	padding-bottom:0;
+}
+
+@font-face
+{
+	fontFamily: Verdana;
+	fontWeight: bold;
+	fontStyle: normal;
+	src: local("Verdana");
+} 
+@font-face {
+    src:url("/assets/fonts/STAN0763HR.ttf");
+    fontFamily: pixelFont;
+    advancedAntiAliasing: false;
+}
+@font-face {
+    src:url("/assets/fonts/MyriadPro-Bold.otf");
+    fontFamily: myriadProBold;
+    advancedAntiAliasing: true;
+    font-weight: bold;
+}
+
+.smallTextAlignedRight
+{
+	fontFamily: myriadProBold;
+	font-weight: bold;
+	font-grid-fit-type: pixel;
+	font-size: 20;
+	font-anti-alias-type: normal;
+	horizontalAlign: right;
+}
+
+.zgFlex
+{
+	color: #000000;
+	font-family: myriadProBold;
+	font-weight: bold;
+	font-grid-fit-type: pixel;
+	font-size: 50;
+	font-anti-alias-type: normal;
+}
+
+.simpleText, Button, CheckBox, ComboBox, ToolTip, LinkBar, Label
+{
+	color: #000000;
+	font-family: pixelFont;
+	font-weight: normal;
+	font-grid-fit-type: pixel;
+	font-size: 8;
+	font-anti-alias-type: normal;
+}
+
+.simpleTextGrey
+{
+	color: #333333;
+	font-family: pixelFont;
+	font-weight: normal;
+	font-grid-fit-type: pixel;
+	font-size: 8;
+	font-anti-alias-type: normal;
+}

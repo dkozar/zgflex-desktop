@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" 
+	paddingRight="10" paddingTop="10" horizontalAlign="right" verticalAlign="top">
+	<mx:Text alpha="0.2" styleName="smallTextAlignedRight">
+		<mx:htmlText>
+<![CDATA[CTRL or SHIFT for multi-select
+Background click for deselect
+Background click&drag for multi-select
+Icon double-click for action
+Background double-click for layout change
+]]>
+		</mx:htmlText>					
+	</mx:Text>
+</mx:Box>

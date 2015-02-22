@@ -1,0 +1,43 @@
+h1. zgflex-desktop
+
+h1. Desktop component for Adobe Flex
+
+h2. Author: Danko Kozar, 2008
+
+h2. zgflex is an open source user interface component library for Adobe Flex 3.
+
+h2. Demos
+
+"Main (Full Screen Demo)":http://dankokozar.com/flex/desktop/
+"Minimal":http://dankokozar.com/flex/desktop/Minimal.html
+"Audio":http://dankokozar.com/flex/desktop/Audio.html
+"BitmapSelectionRenderer":http://dankokozar.com/flex/desktop/BitmapSelectionRenderer.html
+"Scale9SelectionArea":http://dankokozar.com/flex/desktop/Scale9SelectionArea.html
+"Invaders":http://dankokozar.com/flex/desktop/Invaders.html
+
+"Source code":http://dankokozar.com/flex/desktop/srcview
+
+h2. Concept
+
+ * zgflex component library is the iniative of ZgFlex (Adobe user group in Zagreb, Croatia)
+ * I created the Desktop component as an excercise of separation of concerns in Flex.
+ * It is inspired by MS Windows desktop.
+
+* Desktop component supports supports different layouts (not only the grid layout)
+* Supports multiple states (can switch between different icon sets)
+* Could be customized via parameters:
+    * icons - data provider (array)
+	* iconAddedEffect, iconRemovedEffect - effects
+	* iconDoubleClick - double click handler (used for oppening "apps" etc.)
+	* backgroundDoubleClick - background click deselects all the icons, however you could subscribe for making your own action)
+	* layoutManager - dependancy injected layout manager
+	* selectionArea - dependancy injected selection area (graphics)
+
+h2. Resources
+
+* "Full Screen Demo":http://dankokozar.com/flex/desktop/
+* "Screenshots":http://dankokozar.com/blog/projects/zgflexlib-desktop-component/
+* "ZgFlex library at GoogleCode":https://code.google.com/p/zgflex/
+* ZgFlex User Group is now "Frontman HR":www.frontman-hr.org/
+* "Author's homepage":http://dankokozar.com
+* "I’m @DankoKozar on Twitter":https://twitter.com/DankoKozar.

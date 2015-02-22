@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>DesktopDemo</name>
+	<comment></comment>
+	<projects>
+		<project>ZgFlexLib</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.adobe.flexbuilder.project.flexbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.adobe.flexbuilder.project.flexnature</nature>
+		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>bin-release1</name>
+			<type>2</type>
+			<location>C:/inetpub/wwwroot/flexbytes/flexbytes.com/www/demos/zgflex/FlexJourney-20081113/DesktopDemo</location>
+		</link>
+		<link>
+			<name>bin-release2</name>
+			<type>2</type>
+			<location>C:/inetpub/wwwroot/flexbytes/flexbytes.com/www/demos/zgflex/DesktopDemo-20081113</location>
+		</link>
+		<link>
+			<name>bin-release</name>
+			<type>2</type>
+			<location>C:/inetpub/wwwroot/flex/Desktop</location>
+		</link>
+	</linkedResources>
+</projectDescription>

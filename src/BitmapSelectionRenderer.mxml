@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:desktop="org.zgflex.desktop.*" 
+	xmlns:renaun="com.renaun.controls.*" 
+	xmlns:fix="fix.*"
+	xmlns:layout="org.zgflex.desktop.layout.*"
+	layout="vertical" 
+	width="100%" height="100%" 
+	frameRate="30" 
+	horizontalScrollPolicy="off"
+	verticalScrollPolicy="off"
+	applicationComplete="onApplicationComplete()" 
+	xmlns:selection="org.zgflex.desktop.selection.*" 
+	xmlns:state="org.zgflex.desktop.layout.state.*"
+    xmlns:control="org.zgflex.control.*" 
+    viewSourceURL="srcview/index.html">
+	
+	<mx:Style source="assets/styles.css"/>
+	
+	<mx:Script>
+		<![CDATA[
+			import org.zgflex.desktop.layout.state.StateLayoutManagerBase;
+			import gs.easing.Expo;
+			import org.zgflex.desktop.layout.SnapToGridLayoutManager;
+			import org.zgflex.desktop.layout.GridLayoutManager;
+			import org.zgflex.desktop.layout.LineLayoutManager;
+			import org.zgflex.desktop.layout.CircleLayoutManager;
+			import mx.events.MenuEvent;
+			import mx.events.SliderEvent;
+			import mx.effects.Move;
+			import mx.core.UIComponent;
+			
+			/**
+			 * Copyright ZgFlex.org 2008 
+			 * @author Danko Kozar
+			 * 
+			 */
+		
+			import org.zgflex.desktop.DesktopEvent;
+			import flash.net.navigateToURL;
+			import mx.events.ItemClickEvent;
+			import mx.controls.Alert;
+			import mx.events.StateChangeEvent;
+									
+	        [Bindable]
+	        public var scale9ImageClass:Class;
+	        
+	        [Embed(source="assets/images/selection_bg.png")]
+	        [Bindable]
+	        public var selRndImgClass:Class;
+			
+			[Bindable]
+			protected var index:uint = 0;
+			
+			protected function onApplicationComplete():void {
+				// catch key up event
+				stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			} 
+			
+			protected function onKeyUp(e:KeyboardEvent):void {
+				if (e.keyCode == Keyboard.SPACE)
+					doLayout();
+			}
+			
+			protected function iconDoubleClickHandler(e:DesktopEvent):void {
+				// remove icon on double click (just for fun)
+				desktop.removeIcon(e.icon as UIComponent);
+				desktop.doLayout();
+			}
+			
+			protected function backgroundDoubleClickHandler(e:DesktopEvent):void {
+				//Alert.show("You double-clicked the background");
+				var clickCoords:Point = new Point(e.mouseEvent.stageX, e.mouseEvent.stageY);
+				var clickCoordsLocal:Point = desktop.globalToLocal(clickCoords);
+				var sideWidth:Number = 100;
+				var sideHeight:Number = 100;
+				if (clickCoordsLocal.x < sideWidth){
+					layoutControl.layoutMode = LineLayoutManager.LAYOUT_COLUMN;
+					layoutControl.positioningMode = LineLayoutManager.POSITION_TOP;
+				} else if (clickCoordsLocal.x > desktop.width - sideWidth) {
+					layoutControl.layoutMode = LineLayoutManager.LAYOUT_COLUMN;
+					layoutControl.positioningMode = LineLayoutManager.POSITION_BOTTOM;
+				} else if (clickCoordsLocal.y < sideHeight){
+					layoutControl.layoutMode = LineLayoutManager.LAYOUT_ROW;
+					layoutControl.positioningMode = LineLayoutManager.POSITION_TOP;
+				} else if (clickCoordsLocal.y > desktop.height - sideHeight) {
+					layoutControl.layoutMode = LineLayoutManager.LAYOUT_ROW;
+					layoutControl.positioningMode = LineLayoutManager.POSITION_BOTTOM;
+				} else {
+					layoutControl.layoutMode = CircleLayoutManager.LAYOUT_CIRCLE;
+				}
+				doLayout();
+			}
+			
+			protected function itemClickHandler(e:ItemClickEvent):void {
+				switch (e.index){
+					case 0:
+						desktop.icons = set1;
+						break;
+					case 1:
+						desktop.icons = set2;
+						break;
+					default:
+						break;
+				}
+				index = e.index;						
+			}
+			
+			protected function doLayout():void {				
+				switch (layoutControl.layoutMode) {
+					case SnapToGridLayoutManager.LAYOUT_SNAP_TO_GRID:
+						desktop.layoutManager = snapMgr;
+						break;
+					case GridLayoutManager.LAYOUT_GRID:
+						desktop.layoutManager = gridMgr;
+						break;
+					case LineLayoutManager.LAYOUT_ROW:
+					case LineLayoutManager.LAYOUT_COLUMN:
+						desktop.layoutManager = lineMgr;
+						break;
+					case CircleLayoutManager.LAYOUT_CIRCLE:
+						desktop.layoutManager = circleMgr;
+						break;
+					case StateLayoutManagerBase.LAYOUT_STATES:
+						desktop.layoutManager = stateMgr;
+						break;
+					default:
+						throw new Error("unknown layout parameter");
+						break;
+				}
+							
+				// run layout manager
+				desktop.layoutManager.doLayout({
+					layoutMode: layoutControl.layoutMode,
+					positioningMode: layoutControl.positioningMode,
+					easingFunction: layoutControl.easingFunction,
+					tweenDuration: layoutControl.tweenDuration,
+					tweenInstanceDelay: layoutControl.tweenInstanceDelay,
+					state: layoutControl.state
+				});
+			}
+
+		]]>
+	</mx:Script>
+	
+	<!-- Two sets of icons -->
+	<mx:Array id="set1">
+		<mx:Image id="o01" source="@Embed(source='assets/icons/acrobat.png')" x="100" y="100" /><!--addedEffect="fadeInEffect"-->
+		<mx:Image id="o02" source="@Embed(source='assets/icons/bridge.png')" x="200" y="100" />
+		<mx:Image id="o03" source="@Embed(source='assets/icons/dreamweaver.png')" x="300" y="100" />
+		<mx:Image id="o04" source="@Embed(source='assets/icons/fireworks.png')" x="400" y="100" />
+		<mx:Image id="o05" source="@Embed(source='assets/icons/flash.png')" x="500" y="100" />
+		<mx:Image id="o06" source="@Embed(source='assets/icons/illustrator.png')" x="600" y="100" />
+		<mx:Image id="o07" source="@Embed(source='assets/icons/photoshop.png')" x="700" y="100" />
+		<mx:Image id="o08" source="@Embed(source='assets/icons/windows_restart.png')" x="100" y="400" />
+		<mx:Image id="o09" source="@Embed(source='assets/icons/windows_stand_by.png')" x="200" y="400" />
+		<mx:Image id="o10" source="@Embed(source='assets/icons/windows_off.png')" x="300" y="400" />
+	</mx:Array>	
+	<mx:Array id="set2">
+		<mx:Image id="o11" source="@Embed(source='assets/icons/windows_restart.png')" x="100" y="100" />
+		<mx:Image id="o12" source="@Embed(source='assets/icons/windows_stand_by.png')" x="200" y="100" />
+		<mx:Image id="o13" source="@Embed(source='assets/icons/windows_off.png')" x="300" y="100" />
+		<mx:Panel id="o14" width="300" height="200" x="500" y="100" title="A Panel" horizontalAlign="center" verticalAlign="middle">
+			<mx:Button label="A Button" click="Alert.show('Button clicked')" />
+		</mx:Panel>
+		<mx:Image id="o15" source="@Embed(source='assets/icons/flash.png')" x="100" y="200" />
+		<mx:Image id="o16" source="@Embed(source='assets/icons/photoshop.png')" x="200" y="200" />
+		<mx:Image id="o17" source="@Embed(source='assets/icons/illustrator.png')" x="300" y="200" />
+	</mx:Array>
+
+	<!-- Application control bar -->
+	<mx:ApplicationControlBar width="100%" dock="true" >		
+		
+		<!-- LinkBar for switching between icon sets -->
+		<fix:ExtLinkBar id="bar" itemClick="itemClickHandler(event)" selectedIndex="{index}"  fontWeight="bold">
+			<fix:dataProvider>
+				<mx:Object label="Icon Set 1" />
+				<mx:Object label="Icon Set 2" />
+			</fix:dataProvider>
+		</fix:ExtLinkBar>
+		<mx:Spacer width="20" />
+		
+		<!-- Layout Control -->
+		<control:LayoutControl id="layoutControl" change="doLayout()"/>
+		<mx:Spacer width="100%" />
+		
+		<!-- Checkbox for showing/hiding background -->
+		<mx:CheckBox id="chkBg" label="Background image" selected="false" />
+		
+	</mx:ApplicationControlBar>
+
+	<!-- Desktop & background -->
+	<mx:Canvas width="100%" height="100%" backgroundColor="0xcc3333">
+		
+		<!-- Background image -->
+		<renaun:RepeatingImage id="background" width="100%" height="100%"
+			source="@Embed('assets/images/bg.gif')" repeatX="true" repeatY="true" 
+			cacheAsBitmap="true" visible="{chkBg.selected}" />
+		
+		<!-- Desktop component -->
+		<desktop:Desktop id="desktop" width="100%" height="100%" 
+			selectedIconBorderColor="0xffff00"
+			icons="{set1}"
+			iconAddedEffect="{fadeInEffect}"
+			iconRemovedEffect="{fadeOutEffect}"
+			iconDoubleClick="iconDoubleClickHandler(event)"
+			backgroundDoubleClick="backgroundDoubleClickHandler(event)"			
+			layoutManager="{snapMgr}"
+			selectionArea="{defaultSelArea}"
+			selectionRenderer="{selRndImg}"
+			enableSelect="true"
+			focusEnabled="true"
+			tabEnabled="true"
+			layoutAfterMove="{layoutControl.layoutAfterMove}" />
+		
+	</mx:Canvas>
+	
+	<!-- SnapToGridLayoutManager -->
+	<layout:SnapToGridLayoutManager id="snapMgr" horizontalDistance="100" verticalDistance="100" />
+	
+	<!-- GridLayoutManager -->
+	<layout:GridLayoutManager id="gridMgr" horizontalDistance="100" verticalDistance="100" />
+	
+	<!-- GridLayoutManager -->
+	<layout:LineLayoutManager id="lineMgr" horizontalDistance="100" verticalDistance="100" spacingMode="{LineLayoutManager.SPACING_FIXED}" />
+	
+	<!-- CircleLayoutManager -->
+	<layout:CircleLayoutManager id="circleMgr" />
+	
+	<!-- Square selection area -->
+	<selection:SquareSelectionArea id="defaultSelArea" 
+		backgroundColor="0xffff00" backgroundAlpha="0.5" borderColor="0xff00ff" />	
+	
+	<!-- Rounded selection area -->
+	<selection:RoundedSelectionArea id="selAreaRounded" radius="30"
+		backgroundColor="0x00ff66" backgroundAlpha="0.5" borderColor="0xff9999" />
+		
+	<!-- Scale9grid selection area -->
+	<selection:Scale9SelectionArea id="selAreaScale9" imageClass="{scale9ImageClass}"
+		backgroundColor="0x00ff66" backgroundAlpha="0.5" borderColor="0xff9999" />
+	
+	<!-- Square selection renderer -->
+	<selection:SquareSelectionRenderer id="defaultSelRnd" 
+		inflationX="4" inflationY="4" />	
+		
+	<!-- Rounded selection renderer -->
+	<selection:RoundedSelectionRenderer id="roundedSelRnd" 
+		backgroundColor="0xffff00" backgroundAlpha="0.5" borderColor="0xff00ff" inflationX="10" inflationY="10" />	
+	
+	<!-- Bitmap selection renderer -->
+	<selection:BitmapSelectionRenderer id="selRndImg" imageClass="{selRndImgClass}"
+		backgroundColor="0xffff00" backgroundAlpha="0.5" borderColor="0xff00ff" inflationX="4" inflationY="4" />
+	
+	<!-- State layout manager -->
+	<state:StateLayoutManager id="stateMgr" compareById="true">
+		<state:states>
+			<state:State label="FIRST">
+				<state:positions>
+					<state:Position target="{o01}" x="100" y="100" />
+					<state:Position target="{o02}" x="200" y="100" />
+					<state:Position target="{o03}" x="300" y="100" />
+					<state:Position target="{o04}" x="400" y="100" />
+					<state:Position target="{o05}" x="600" y="100" />
+					<state:Position target="{o06}" x="700" y="100" />
+					<state:Position target="{o07}" x="600" y="200" />
+					<state:Position target="{o08}" x="700" y="200" />
+					<state:Position target="{o09}" x="600" y="300" />
+					<state:Position target="{o10}" x="700" y="300" />
+				</state:positions>
+			</state:State>
+			<state:State label="SECOND">
+				<state:positions>
+					<state:Position target="{o01}" x="100" y="200" />
+					<state:Position target="{o02}" x="200" y="300" />
+					<state:Position target="{o03}" x="300" y="400" />
+					<state:Position target="{o04}" x="400" y="500" />
+					<state:Position target="{o05}" x="600" y="600" />
+					<state:Position target="{o06}" x="700" y="600" />
+					<state:Position target="{o07}" x="600" y="500" />
+					<state:Position target="{o08}" x="700" y="500" />
+					<state:Position target="{o09}" x="600" y="400" />
+					<state:Position target="{o10}" x="700" y="400" />
+				</state:positions>
+			</state:State>
+			<state:State label="THIRD">
+				<state:positions>
+					<state:Position target="{o01}" x="700" y="100" />
+					<state:Position target="{o02}" x="700" y="200" />
+					<state:Position target="{o03}" x="700" y="300" />
+					<state:Position target="{o04}" x="700" y="400" />
+					<state:Position target="{o05}" x="700" y="500" />
+					<state:Position target="{o06}" x="800" y="100" />
+					<state:Position target="{o07}" x="800" y="200" />
+					<state:Position target="{o08}" x="800" y="300" />
+					<state:Position target="{o09}" x="800" y="400" />
+					<state:Position target="{o10}" x="800" y="500" />
+				</state:positions>
+			</state:State>
+		</state:states>
+	</state:StateLayoutManager>
+	
+	<!-- Add/remove icon effects -->
+	<mx:Fade id="fadeInEffect" duration="500" alphaFrom="0" alphaTo="1" />
+	<mx:Fade id="fadeOutEffect" duration="500" alphaFrom="1" alphaTo="0" />
+	
+</mx:Application>

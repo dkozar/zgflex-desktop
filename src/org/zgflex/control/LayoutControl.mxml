@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<mx:Metadata>
+		[Event(name="change", type="flash.events.Event")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			import org.zgflex.desktop.layout.state.StateLayoutManagerBase;
+			import org.zgflex.desktop.layout.state.StateLayoutManager;
+			import mx.events.SliderEvent;
+			import mx.events.MenuEvent;
+			import gs.easing.Back;
+			
+			import org.zgflex.desktop.layout.LineLayoutManager;
+			import org.zgflex.desktop.layout.SnapToGridLayoutManager;
+			
+			protected var _layoutMode:String = SnapToGridLayoutManager.LAYOUT_SNAP_TO_GRID;
+			public function set layoutMode(value:String):void {
+				_layoutMode = value;
+			}
+			public function get layoutMode():String {
+				return _layoutMode;
+			} 
+			
+			protected var _positioningMode:String = LineLayoutManager.POSITION_MIDDLE;
+			public function set positioningMode(value:String):void {
+				_positioningMode = value;
+			}
+			public function get positioningMode():String {
+				return _positioningMode;
+			}
+			
+			protected var _state:String = "";
+			public function set state(value:String):void {
+				_state = value;
+			}
+			public function get state():String {
+				return _state;
+			}
+			
+			// tween
+			protected var _tweenType:String = "Back";
+			public function get tweenType():String {
+				return _tweenType;
+			}
+			
+			protected var _tweenDirection:String = "easeInOut";
+			public function get tweenDirection():String {
+				return _tweenDirection;
+			}
+			
+			protected var _easingFunction:Function = gs.easing.Back.easeInOut;
+			public function get easingFunction():Function {
+				return _easingFunction;
+			}
+			
+			protected var _tweenDuration:uint = 500;
+			public function get tweenDuration():uint {
+				return _tweenDuration;
+			}
+			
+			protected var _tweenInstanceDelay:uint = 30;
+			public function get tweenInstanceDelay():uint {
+				return _tweenInstanceDelay;
+			}
+			
+			[Bindable]
+			public var layoutAfterMove:Boolean = false;
+		
+			protected function onMenuItemClick(e:MenuEvent):void {
+				var arr:Array = String(e.item.@value).split("-");
+				
+				_layoutMode = arr[0];
+				
+				if (arr[1]){
+					if (_layoutMode == LineLayoutManager.LAYOUT_ROW ||
+						_layoutMode == LineLayoutManager.LAYOUT_COLUMN)
+					{
+						switch (arr[1]) {
+							case "TH":
+								_positioningMode = LineLayoutManager.POSITION_TOP_HIDDEN;
+								break;
+							case "THH":
+								_positioningMode = LineLayoutManager.POSITION_TOP_HALF_HIDDEN;
+								break;
+							case "T":
+								_positioningMode = LineLayoutManager.POSITION_TOP;
+								break;
+							case "M":
+								_positioningMode = LineLayoutManager.POSITION_MIDDLE;
+								break;
+							case "B":
+								_positioningMode = LineLayoutManager.POSITION_BOTTOM;
+								break;
+							case "BHH":
+								_positioningMode = LineLayoutManager.POSITION_BOTTOM_HALF_HIDDEN;
+							break;
+								case "BH":
+								_positioningMode = LineLayoutManager.POSITION_BOTTOM_HIDDEN;
+								break;
+							default:
+								throw new Error("wrong positioning parameter");
+								break;
+						}
+					} else if (_layoutMode == StateLayoutManagerBase.LAYOUT_STATES)
+					{
+						_state = arr[1];
+					}
+				}
+				
+				doLayout();
+			}
+			
+			protected function onComboChange(e:Event):void {
+				var selectedItem:Object = ComboBox(e.target).selectedItem;
+				
+				switch (e.target){
+					case cbTween:
+						_tweenType = selectedItem.value;
+						break;
+					case cbTweenDirection:
+						_tweenDirection = selectedItem.value;
+						break;
+					default:
+						break;
+				}			
+				
+				switch (_tweenType) {
+					case "Back":
+						_easingFunction = gs.easing.Back[_tweenDirection];
+						break;	
+					case "Bounce":
+						_easingFunction = gs.easing.Bounce[_tweenDirection];
+						break;
+					case "Circ":
+						_easingFunction = gs.easing.Circ[_tweenDirection];
+						break;
+					case "Cubic":
+						_easingFunction = gs.easing.Cubic[_tweenDirection];
+						break;
+					case "Elastic":
+						_easingFunction = gs.easing.Elastic[_tweenDirection];
+						break;
+					case "Expo":
+						_easingFunction = gs.easing.Expo[_tweenDirection];
+						break;
+					case "Linear":
+						_easingFunction = gs.easing.Linear[_tweenDirection];
+						break;
+					case "Quad":
+						_easingFunction = gs.easing.Quad[_tweenDirection];
+						break;
+					case "Quart":
+						_easingFunction = gs.easing.Quart[_tweenDirection];
+						break;
+					case "Quint":
+						_easingFunction = gs.easing.Quint[_tweenDirection];
+						break;
+					case "Sine":
+						_easingFunction = gs.easing.Sine[_tweenDirection];
+					case "Strong":
+						_easingFunction = gs.easing.Strong[_tweenDirection];
+						break;					
+					default:
+						throw new Error("wrong effect parameter");
+						break;
+				}
+				
+				doLayout();
+			}
+			
+			protected function onSliderChange(e:SliderEvent):void {
+				switch (e.target){
+					case sliderDur:
+						_tweenDuration = e.value;
+						break;
+					case sliderDelay:
+						_tweenInstanceDelay = e.value;
+						break;
+					default:
+						break;
+				}
+			}
+			
+			protected function doLayout():void {
+				dispatchEvent(new Event("change"));
+			}
+			
+			protected function onChkAutoClick(e:MouseEvent):void {
+				layoutAfterMove = chkAuto.selected;
+				if (chkAuto.selected)
+					doLayout();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox>
+		<mx:Label text="Layout:" />
+		<mx:MenuBar labelField="@label" showRoot="true" itemClick="onMenuItemClick(event)" styleName="simpleText">
+			<mx:XMLList>
+				<menuitem label="Choose layout" >
+					<menuitem label="Snap To Grid" value="LAYOUT_SNAP_TO_GRID"/>
+					<menuitem label="Grid" value="LAYOUT_GRID"/>
+		    		<menuitem label="Row">
+		    			<menuitem label="Top Hidden" value="LAYOUT_ROW-TH" />
+		    			<menuitem label="Top Half Hidden" value="LAYOUT_ROW-THH" />
+		    			<menuitem label="Top" value="LAYOUT_ROW-T" />
+		    			<menuitem label="Middle" value="LAYOUT_ROW-M" />
+		    			<menuitem label="Bottom" value="LAYOUT_ROW-B" />
+		    			<menuitem label="Bottom Half Hidden" value="LAYOUT_ROW-BHH" />
+		    			<menuitem label="Bottom Hidden" value="LAYOUT_ROW-BH" />
+		    		</menuitem>
+		    		<menuitem label="Column">
+		    			<menuitem label="Left Hidden" value="LAYOUT_COLUMN-TH" />
+		    			<menuitem label="Left Half Hidden" value="LAYOUT_COLUMN-THH" />
+		    			<menuitem label="Left" value="LAYOUT_COLUMN-T" />
+		    			<menuitem label="Center" value="LAYOUT_COLUMN-M" />
+		    			<menuitem label="Right" value="LAYOUT_COLUMN-B" />
+		    			<menuitem label="Right Half Hidden" value="LAYOUT_COLUMN-BHH" />
+		    			<menuitem label="Right Hidden" value="LAYOUT_COLUMN-BH" />
+		    		</menuitem>
+		    		<menuitem label="Circle" value="LAYOUT_CIRCLE"/>
+		    		<menuitem type="separator" />
+		    		<menuitem label="State">
+		    			<menuitem label="First state" value="LAYOUT_STATES-FIRST" />
+		    			<menuitem label="Second state" value="LAYOUT_STATES-SECOND" />
+		    			<menuitem label="Third state" value="LAYOUT_STATES-THIRD" />
+		    		</menuitem>
+	    		</menuitem>
+			</mx:XMLList>
+		</mx:MenuBar>
+	</mx:VBox>
+	<mx:Spacer width="20" />
+	<mx:VBox>
+		<mx:Label text="Tween:" />
+		<mx:HBox>
+			<mx:ComboBox id="cbTween" change="onComboChange(event)" selectedIndex="0" labelField="label" rowCount="15" >
+				<mx:dataProvider>
+					<mx:Object value="Back" label="Back" />
+					<mx:Object value="Bounce" label="Bounce" />
+					<mx:Object value="Circ" label="Circular" />
+					<mx:Object value="Cubic" label="Cubic" />
+					<mx:Object value="Elastic" label="Elastic" />
+					<mx:Object value="Expo" label="Exponential" />
+					<mx:Object value="Linear" label="Linear" />
+					<mx:Object value="Quad" label="Quadratic" />
+					<mx:Object value="Quart" label="Quartic" />
+					<mx:Object value="Quint" label="Quintic" />
+					<mx:Object value="Sine" label="Sine" />
+					<mx:Object value="Strong" label="Strong" />
+				</mx:dataProvider>
+			</mx:ComboBox>
+			<mx:ComboBox id="cbTweenDirection" change="onComboChange(event)" selectedIndex="2" labelField="label" rowCount="10" >
+				<mx:dataProvider>
+					<mx:Object value="easeIn" label="Ease In" />
+					<mx:Object value="easeOut" label="Ease Out" />
+					<mx:Object value="easeInOut" label="Ease In Out" />
+				</mx:dataProvider>
+			</mx:ComboBox>
+		</mx:HBox>
+	</mx:VBox>
+	<mx:Spacer width="20" />
+	<mx:VBox horizontalAlign="right">
+		<mx:HBox>
+			<mx:Label text="Duration:" />
+			<mx:HSlider id="sliderDur" minWidth="100" width="200" 
+				minimum="0" maximum="10000" snapInterval="100" value="500"
+				change="onSliderChange(event)" />
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="Delay:" />
+			<mx:HBox horizontalAlign="right" width="200" >
+				<mx:HSlider id="sliderDelay" minWidth="100" width="200" 
+					minimum="0" maximum="500" snapInterval="5" value="30"
+					change="onSliderChange(event)" />
+			</mx:HBox>
+		</mx:HBox>
+	</mx:VBox>
+	<mx:Spacer width="20" />
+	<mx:Box verticalAlign="middle" height="100%">
+		<mx:CheckBox id="chkAuto" label="Auto layout" selected="false" click="onChkAutoClick(event)" />
+	</mx:Box>
+	<mx:Spacer width="20" />
+	<mx:VBox verticalAlign="middle" height="100%">
+		<mx:Button label="Do Layout!" click="doLayout()" />
+	</mx:VBox>
+</mx:HBox>
