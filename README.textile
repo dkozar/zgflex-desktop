@@ -2,9 +2,11 @@ h1. zgflex-desktop
 
 h1. Desktop component for Adobe Flex
 
-h2. Author: Danko Kozar, 2008
+h2. Author: "Danko Kozar":http://dankokozar.com, &copy; 2008
 
 h2. zgflex is an open source user interface component library for Adobe Flex 3.
+
+<img src="http://dankokozar.com/images/zgflex-desktop-800.png"></img>
 
 h2. Demos
 
@@ -40,4 +42,4 @@ h2. Resources
 * "ZgFlex library at GoogleCode":https://code.google.com/p/zgflex/
 * ZgFlex User Group is now "Frontman HR":http://www.frontman-hr.org/
 * "Author's homepage":http://dankokozar.com
-* "I’m @DankoKozar on Twitter":https://twitter.com/DankoKozar.
+* "Iâ€™m @DankoKozar on Twitter":https://twitter.com/DankoKozar.
