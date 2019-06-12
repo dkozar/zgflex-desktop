@@ -6,7 +6,7 @@ h2. Author: "Danko Kozar":http://dankokozar.com, &copy; 2008
 
 h2. zgflex is an open source user interface component library for Adobe Flex 3.
 
-<img src="http://dankokozar.com/images/zgflex-desktop-800.png"></img>
+<img src="./images/zgflex-desktop.png"></img>
 
 h2. Demos
 
